@@ -1001,7 +1001,43 @@ function renderBillRow(b) {
             </div>
         </td>
     `;
-    return tr;
+}
+
+async function generateNextBillNumber() {
+    const input = document.getElementById('billNumber');
+    if (!input) return;
+    input.value = 'Generating...';
+    try {
+        if (!supabaseClient) {
+            input.value = 'BILL-1001';
+            return;
+        }
+        const { data, error } = await supabaseClient
+            .from('bills')
+            .select('bill_number')
+            .order('created_at', { ascending: false })
+            .limit(1);
+
+        if (error) throw error;
+
+        let nextNum = 1001;
+        if (data && data.length > 0 && data[0].bill_number) {
+            const parts = data[0].bill_number.split('-');
+            const lastPart = parts[parts.length - 1];
+            const parsed = parseInt(lastPart, 10);
+            if (!isNaN(parsed)) {
+                if (parsed > 10000000000) {
+                    nextNum = 1001; // restart if it was a timestamp
+                } else {
+                    nextNum = parsed + 1;
+                }
+            }
+        }
+        input.value = 'BILL-' + String(nextNum).padStart(4, '0');
+    } catch (e) {
+        console.error('Error generating bill number:', e);
+        input.value = 'BILL-' + Date.now();
+    }
 }
 
 function initBills() {
@@ -1013,7 +1049,7 @@ function initBills() {
 
     createBtn?.addEventListener('click', () => {
         document.getElementById('billEditId').value = '';
-        document.getElementById('billNumber').value = '';
+        generateNextBillNumber();
         document.getElementById('billDate').value = new Date().toISOString().split('T')[0];
         document.getElementById('billNotes').value = '';
         document.getElementById('billOutlet').value = '';
@@ -1155,19 +1191,49 @@ async function saveBill() {
         return;
     }
 
+    const btn = document.getElementById('saveBillBtn');
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+
+    // Fetch latest bill number again to prevent conflicts and ensure strict sequential ordering
+    let billNumber = '';
+    try {
+        if (!supabaseClient) throw new Error('Supabase client not initialized');
+        const { data, error } = await supabaseClient
+            .from('bills')
+            .select('bill_number')
+            .order('created_at', { ascending: false })
+            .limit(1);
+        if (error) throw error;
+
+        let nextNum = 1001;
+        if (data && data.length > 0 && data[0].bill_number) {
+            const parts = data[0].bill_number.split('-');
+            const lastPart = parts[parts.length - 1];
+            const parsed = parseInt(lastPart, 10);
+            if (!isNaN(parsed)) {
+                if (parsed > 10000000000) {
+                    nextNum = 1001;
+                } else {
+                    nextNum = parsed + 1;
+                }
+            }
+        }
+        billNumber = 'BILL-' + String(nextNum).padStart(4, '0');
+        document.getElementById('billNumber').value = billNumber; // update UI
+    } catch (e) {
+        console.error('Failed to regenerate bill number on save:', e);
+        billNumber = document.getElementById('billNumber').value.trim();
+        if (!billNumber || billNumber === 'Generating...' || billNumber.startsWith('Generating')) {
+            billNumber = 'BILL-' + Date.now();
+        }
+    }
+
     const subtotalAmount = billLineItems.reduce((s, i) => s + i.line_total, 0);
     const discountPercent = parseFloat(document.getElementById('billDiscount').value) || 0;
     const discountAmount = subtotalAmount * (discountPercent / 100);
     const totalAmount = subtotalAmount - discountAmount;
     const paymentType = document.getElementById('billPaymentType').value || 'cash';
-    let billNumber = document.getElementById('billNumber').value.trim();
-    if (!billNumber) {
-        billNumber = 'BILL-' + Date.now();
-    }
-
-    const btn = document.getElementById('saveBillBtn');
-    btn.disabled = true;
-    btn.textContent = 'Saving...';
 
     try {
         // Insert bill
