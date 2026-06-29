@@ -1379,12 +1379,32 @@ function initGivenCheques() {
     const form = document.getElementById('givenChequeForm');
     const container = document.getElementById('givenChequeFormContainer');
 
+    // Handle bank select change
+    document.getElementById('gcBankSelect')?.addEventListener('change', e => {
+        const customInput = document.getElementById('gcBankName');
+        if (e.target.value === 'Other') {
+            customInput.style.display = 'block';
+            customInput.required = true;
+            customInput.value = '';
+            customInput.focus();
+        } else {
+            customInput.style.display = 'none';
+            customInput.required = false;
+            customInput.value = e.target.value;
+        }
+    });
+
     addBtn?.addEventListener('click', () => {
         document.getElementById('givenChequeEditId').value = '';
         form.reset();
+        const customInput = document.getElementById('gcBankName');
+        if (customInput) {
+            customInput.style.display = 'none';
+            customInput.required = false;
+        }
         document.getElementById('gcDate').value = new Date().toISOString().split('T')[0];
         container.style.display = 'block';
-        document.getElementById('gcBankName').focus();
+        document.getElementById('gcBankSelect')?.focus();
     });
 
     cancelBtn?.addEventListener('click', () => { container.style.display = 'none'; });
@@ -1430,7 +1450,32 @@ window.editGivenCheque = function(id) {
     const c = allGivenChequesData.find(x => x.id === id);
     if (!c) return;
     document.getElementById('givenChequeEditId').value = c.id;
-    document.getElementById('gcBankName').value = c.bank_name;
+
+    // Set bank select / custom input
+    const select = document.getElementById('gcBankSelect');
+    const customInput = document.getElementById('gcBankName');
+    if (select && customInput) {
+        let matched = false;
+        for (let i = 0; i < select.options.length; i++) {
+            if (select.options[i].value === c.bank_name) {
+                select.selectedIndex = i;
+                matched = true;
+                break;
+            }
+        }
+        if (matched) {
+            select.value = c.bank_name;
+            customInput.style.display = 'none';
+            customInput.required = false;
+            customInput.value = c.bank_name;
+        } else {
+            select.value = 'Other';
+            customInput.style.display = 'block';
+            customInput.required = true;
+            customInput.value = c.bank_name;
+        }
+    }
+
     document.getElementById('gcChequeNumber').value = c.cheque_number;
     document.getElementById('gcAmount').value = c.amount;
     document.getElementById('gcDate').value = c.cheque_date;
@@ -1438,7 +1483,7 @@ window.editGivenCheque = function(id) {
     document.getElementById('gcStatus').value = c.status;
     document.getElementById('gcNotes').value = c.notes || '';
     document.getElementById('givenChequeFormContainer').style.display = 'block';
-    document.getElementById('gcBankName').focus();
+    document.getElementById('gcBankSelect')?.focus();
 };
 
 window.updateGivenStatus = async function(id, newStatus) {
@@ -1544,14 +1589,34 @@ function initReceivedCheques() {
     const form = document.getElementById('receivedChequeForm');
     const container = document.getElementById('receivedChequeFormContainer');
 
+    // Handle bank select change
+    document.getElementById('rcBankSelect')?.addEventListener('change', e => {
+        const customInput = document.getElementById('rcBankName');
+        if (e.target.value === 'Other') {
+            customInput.style.display = 'block';
+            customInput.required = true;
+            customInput.value = '';
+            customInput.focus();
+        } else {
+            customInput.style.display = 'none';
+            customInput.required = false;
+            customInput.value = e.target.value;
+        }
+    });
+
     addBtn?.addEventListener('click', () => {
         document.getElementById('receivedChequeEditId').value = '';
         form.reset();
+        const customInput = document.getElementById('rcBankName');
+        if (customInput) {
+            customInput.style.display = 'none';
+            customInput.required = false;
+        }
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('rcReceivedDate').value = today;
         document.getElementById('rcRealizingDate').value = today;
         container.style.display = 'block';
-        document.getElementById('rcBankName').focus();
+        document.getElementById('rcBankSelect')?.focus();
     });
 
     cancelBtn?.addEventListener('click', () => { container.style.display = 'none'; });
@@ -1599,7 +1664,32 @@ window.editReceivedCheque = function(id) {
     const c = allReceivedChequesData.find(x => x.id === id);
     if (!c) return;
     document.getElementById('receivedChequeEditId').value = c.id;
-    document.getElementById('rcBankName').value = c.bank_name;
+
+    // Set bank select / custom input
+    const select = document.getElementById('rcBankSelect');
+    const customInput = document.getElementById('rcBankName');
+    if (select && customInput) {
+        let matched = false;
+        for (let i = 0; i < select.options.length; i++) {
+            if (select.options[i].value === c.bank_name) {
+                select.selectedIndex = i;
+                matched = true;
+                break;
+            }
+        }
+        if (matched) {
+            select.value = c.bank_name;
+            customInput.style.display = 'none';
+            customInput.required = false;
+            customInput.value = c.bank_name;
+        } else {
+            select.value = 'Other';
+            customInput.style.display = 'block';
+            customInput.required = true;
+            customInput.value = c.bank_name;
+        }
+    }
+
     document.getElementById('rcChequeNumber').value = c.cheque_number;
     document.getElementById('rcAmount').value = c.amount;
     document.getElementById('rcDrawer').value = c.drawer;
@@ -1609,7 +1699,7 @@ window.editReceivedCheque = function(id) {
     document.getElementById('rcStatus').value = c.status;
     document.getElementById('rcNotes').value = c.notes || '';
     document.getElementById('receivedChequeFormContainer').style.display = 'block';
-    document.getElementById('rcBankName').focus();
+    document.getElementById('rcBankSelect')?.focus();
 };
 
 window.updateReceivedStatus = async function(id, newStatus) {

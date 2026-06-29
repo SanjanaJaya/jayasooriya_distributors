@@ -538,8 +538,28 @@
                         <input type="hidden" id="givenChequeEditId">
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="gcBankName">🏦 Bank Name *</label>
-                                <input type="text" id="gcBankName" placeholder="e.g. Bank of Ceylon" required>
+                                <label for="gcBankSelect">🏦 Bank Name *</label>
+                                <select id="gcBankSelect" required>
+                                    <option value="">-- Select Bank --</option>
+                                    <option value="Bank of Ceylon">Bank of Ceylon (BOC)</option>
+                                    <option value="People's Bank">People's Bank</option>
+                                    <option value="Commercial Bank of Ceylon">Commercial Bank of Ceylon</option>
+                                    <option value="Hatton National Bank">Hatton National Bank (HNB)</option>
+                                    <option value="Sampath Bank">Sampath Bank</option>
+                                    <option value="Seylan Bank">Seylan Bank</option>
+                                    <option value="Nations Trust Bank">Nations Trust Bank (NTB)</option>
+                                    <option value="National Development Bank">National Development Bank (NDB)</option>
+                                    <option value="DFCC Bank">DFCC Bank</option>
+                                    <option value="Pan Asia Bank">Pan Asia Bank (PABC)</option>
+                                    <option value="Union Bank of Colombo">Union Bank of Colombo</option>
+                                    <option value="Amana Bank">Amana Bank</option>
+                                    <option value="Cargills Bank">Cargills Bank</option>
+                                    <option value="Standard Chartered Bank">Standard Chartered Bank</option>
+                                    <option value="Habib Bank Limited">Habib Bank Limited (HBL)</option>
+                                    <option value="MCB Bank">MCB Bank</option>
+                                    <option value="Other">Other Bank...</option>
+                                </select>
+                                <input type="text" id="gcBankName" placeholder="Enter bank name" style="display:none; margin-top:8px;">
                             </div>
                             <div class="form-group">
                                 <label for="gcChequeNumber">🔢 Cheque Number *</label>
@@ -658,8 +678,28 @@
                         <input type="hidden" id="receivedChequeEditId">
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="rcBankName">🏦 Bank Name *</label>
-                                <input type="text" id="rcBankName" placeholder="e.g. Commercial Bank" required>
+                                <label for="rcBankSelect">🏦 Bank Name *</label>
+                                <select id="rcBankSelect" required>
+                                    <option value="">-- Select Bank --</option>
+                                    <option value="Bank of Ceylon">Bank of Ceylon (BOC)</option>
+                                    <option value="People's Bank">People's Bank</option>
+                                    <option value="Commercial Bank of Ceylon">Commercial Bank of Ceylon</option>
+                                    <option value="Hatton National Bank">Hatton National Bank (HNB)</option>
+                                    <option value="Sampath Bank">Sampath Bank</option>
+                                    <option value="Seylan Bank">Seylan Bank</option>
+                                    <option value="Nations Trust Bank">Nations Trust Bank (NTB)</option>
+                                    <option value="National Development Bank">National Development Bank (NDB)</option>
+                                    <option value="DFCC Bank">DFCC Bank</option>
+                                    <option value="Pan Asia Bank">Pan Asia Bank (PABC)</option>
+                                    <option value="Union Bank of Colombo">Union Bank of Colombo</option>
+                                    <option value="Amana Bank">Amana Bank</option>
+                                    <option value="Cargills Bank">Cargills Bank</option>
+                                    <option value="Standard Chartered Bank">Standard Chartered Bank</option>
+                                    <option value="Habib Bank Limited">Habib Bank Limited (HBL)</option>
+                                    <option value="MCB Bank">MCB Bank</option>
+                                    <option value="Other">Other Bank...</option>
+                                </select>
+                                <input type="text" id="rcBankName" placeholder="Enter bank name" style="display:none; margin-top:8px;">
                             </div>
                             <div class="form-group">
                                 <label for="rcChequeNumber">🔢 Cheque Number *</label>
