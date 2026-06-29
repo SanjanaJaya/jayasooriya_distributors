@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="JD Distributors">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#D1001F">
+    <meta name="description" content="Jayasooriya Distributors — Tyre Distribution Management System">
+    <title>Jayasooriya Distributors — Management System</title>
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/76ZhHx1X/With-White-BG.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="https://i.postimg.cc/76ZhHx1X/With-White-BG.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     LOGIN MODAL
+════════════════════════════════════════════ -->
+<div class="login-modal active" id="loginModal">
+    <div class="login-box">
+        <img src="https://i.postimg.cc/76ZhHx1X/With-White-BG.png" alt="Jayasooriya Distributors Logo" class="login-logo">
+        <div class="login-title">JAYASOORIYA<br>DISTRIBUTORS</div>
+        <div class="login-subtitle">Tyre Distribution Management</div>
+        <form id="loginForm" class="login-form">
+            <div class="form-group">
+                <label for="loginEmail">📧 Email Address</label>
+                <input type="email" id="loginEmail" placeholder="Enter your email" required autocomplete="email">
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">🔒 Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn btn-primary login-btn" id="loginSubmitBtn">Sign In</button>
+            <div class="login-error" id="loginError"></div>
+        </form>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     MAIN APP CONTAINER
+════════════════════════════════════════════ -->
+<div class="container">
+
+    <!-- ═══ SIDEBAR ═══ -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-section">
+                <img src="https://i.postimg.cc/76ZhHx1X/With-White-BG.png" alt="Jayasooriya Distributors" class="logo">
+                <h1 class="brand-name">JAYASOORIYA<br>DISTRIBUTORS</h1>
+                <div class="brand-subtitle">Tyre Distribution</div>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <!-- Dashboard -->
+            <button class="nav-item active" data-page="dashboard" id="nav-dashboard">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </button>
+
+            <div class="nav-divider"></div>
+
+            <!-- Outlets -->
+            <button class="nav-item" data-page="outlets" id="nav-outlets">
+                <span class="nav-icon">🏪</span>
+                <span>Outlets</span>
+            </button>
+
+            <div class="nav-divider"></div>
+
+            <!-- Products -->
+            <button class="nav-item" data-page="products" id="nav-products">
+                <span class="nav-icon">🛞</span>
+                <span>Products (Tyres)</span>
+            </button>
+
+            <div class="nav-divider"></div>
+
+            <!-- Bills -->
+            <button class="nav-item" data-page="bills" id="nav-bills">
+                <span class="nav-icon">🧾</span>
+                <span>Bills</span>
+            </button>
+
+            <div class="nav-divider"></div>
+
+            <!-- Given Cheques -->
+            <button class="nav-item" data-page="given-cheques" id="nav-given-cheques">
+                <span class="nav-icon">💳</span>
+                <span>Given Cheques</span>
+            </button>
+
+            <div class="nav-divider"></div>
+
+            <!-- Received Cheques -->
+            <button class="nav-item" data-page="received-cheques" id="nav-received-cheques">
+                <span class="nav-icon">📨</span>
+                <span>Received Cheques</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="logout-btn" id="logoutBtn">
+                <span>🚪</span> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- ═══ MAIN CONTENT ═══ -->
+    <main class="main-content">
+        <header class="top-header">
+            <button class="hamburger-menu" id="hamburgerMenu" aria-label="Toggle Navigation">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="header-left">
+                <h2 id="pageTitle">Dashboard</h2>
+            </div>
+            <div class="header-right">
+                <span id="userEmail" class="user-email"></span>
+            </div>
+        </header>
+
+        <!-- Dark Mode Toggle -->
+        <div class="dark-mode-toggle" id="darkModeToggle">
+            <button aria-label="Toggle dark mode" title="Toggle Dark / Light Mode">
+                <span class="light-icon">🌙</span>
+                <span class="dark-icon">☀️</span>
+            </button>
+        </div>
+
+        <!-- Offline Banner -->
+        <div class="offline-banner" id="offlineBanner">
+            ⚠️ You are offline — showing cached data.
+        </div>
+
+        <!-- Mobile Overlay -->
+        <div class="mobile-overlay" id="mobileOverlay"></div>
+
+        <div class="pages-container">
+
+            <!-- ═══════════════════════════════════════════
+                 DASHBOARD PAGE
+            ══════════════════════════════════════════════ -->
+            <div id="dashboard" class="page active">
+                <!-- Cheques Due Alert Banner -->
+                <div class="alert-banner" id="dashAlertBanner" style="display:none;">
+                    <span class="alert-banner-icon">⚠️</span>
+                    <div class="alert-banner-content">
+                        <div class="alert-banner-title">Cheques Realizing Soon!</div>
+                        <div class="alert-banner-list" id="dashAlertList"></div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Filter Bar -->
+                <div class="filter-bar" style="margin-bottom: 20px; justify-content: flex-end;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 13px; font-weight: 600; color: var(--text-secondary);">📅 Filter Month:</span>
+                        <input type="month" id="dashMonthFilter" style="padding:8px 12px; border-radius:var(--radius-pill); border:1.5px solid var(--surface-border); background:var(--surface-card); color:var(--text-primary); font-family:'DM Sans',sans-serif; cursor:pointer; font-size:13px;">
+                        <button class="btn btn-secondary btn-xs" id="clearDashMonthBtn" style="border-radius:var(--radius-pill); padding: 8px 14px;">All Time</button>
+                    </div>
+                </div>
+
+                <!-- Metrics Grid -->
+                <div class="metrics-grid" id="dashMetrics">
+                    <div class="metric-card">
+                        <div class="metric-icon">🧾</div>
+                        <div class="metric-content">
+                            <div class="metric-label">Total Bills</div>
+                            <div class="metric-value" id="dashTotalBills">—</div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">💰</div>
+                        <div class="metric-content">
+                            <div class="metric-label">Total Revenue</div>
+                            <div class="metric-value" id="dashTotalRevenue">—</div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">📈</div>
+                        <div class="metric-content">
+                            <div class="metric-label">Total Profit</div>
+                            <div class="metric-value green" id="dashTotalProfit">—</div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">🏪</div>
+                        <div class="metric-content">
+                            <div class="metric-label">Active Outlets</div>
+                            <div class="metric-value" id="dashTotalOutlets">—</div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">🛞</div>
+                        <div class="metric-content">
+                            <div class="metric-label">Products</div>
+                            <div class="metric-value" id="dashTotalProducts">—</div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">📨</div>
+                        <div class="metric-content">
+                            <div class="metric-label">Pending Received</div>
+                            <div class="metric-value amber" id="dashPendingReceived">—</div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">💳</div>
+                        <div class="metric-content">
+                            <div class="metric-label">Pending Given</div>
+                            <div class="metric-value red" id="dashPendingGiven">—</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Cheques Section -->
+                <div class="performance-section" id="dashUpcomingCheques">
+                    <h3>📅 Upcoming Realizations (Next 30 Days)</h3>
+                    <div id="dashUpcomingList">
+                        <div class="tyre-spinner"><span class="tyre-spinner-icon">🛞</span>Loading...</div>
+                    </div>
+                </div>
+
+                <!-- Recent Bills -->
+                <div class="performance-section">
+                    <h3>🧾 Recent Bills</h3>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Bill No.</th>
+                                    <th>Outlet</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dashRecentBillsBody">
+                                <tr class="no-data-row"><td colspan="5">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 OUTLETS PAGE
+            ══════════════════════════════════════════════ -->
+            <div id="outlets" class="page">
+                <div class="page-header">
+                    <h2>🏪 Outlets</h2>
+                    <button class="btn btn-primary" id="addOutletBtn">+ Add Outlet</button>
+                </div>
+
+                <!-- Add Outlet Form -->
+                <div class="form-container" id="outletFormContainer" style="display:none;">
+                    <form id="outletForm">
+                        <input type="hidden" id="outletEditId">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="outletName">🏪 Outlet Name *</label>
+                                <input type="text" id="outletName" placeholder="e.g. Matara Branch" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="outletAddress">📍 Address</label>
+                                <input type="text" id="outletAddress" placeholder="Street, City">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="cancelOutletBtn">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="saveOutletBtn">💾 Save Outlet</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Search + View Toggle -->
+                <div class="filter-bar">
+                    <div class="search-input">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="outletSearch" placeholder="Search outlets by name or address...">
+                    </div>
+                    <div class="view-toggle" id="outletViewToggle">
+                        <button class="view-toggle-btn active" data-view="grid" title="Card View">⊞ Cards</button>
+                        <button class="view-toggle-btn" data-view="list" title="List View">☰ List</button>
+                    </div>
+                </div>
+
+                <!-- Outlet Display Area -->
+                <div id="outletDisplayArea">
+                    <div class="outlet-grid" id="outletGrid">
+                        <div class="tyre-spinner"><span class="tyre-spinner-icon">🛞</span>Loading outlets...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 PRODUCTS PAGE
+            ══════════════════════════════════════════════ -->
+            <div id="products" class="page">
+                <div class="page-header">
+                    <h2>🛞 Products (Tyres)</h2>
+                    <button class="btn btn-primary" id="addProductBtn">+ Add Product</button>
+                </div>
+
+                <!-- Add Product Form -->
+                <div class="form-container" id="productFormContainer" style="display:none;">
+                    <form id="productForm">
+                        <input type="hidden" id="productEditId">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productBrand">🏷️ Brand *</label>
+                                <input type="text" id="productBrand" placeholder="e.g. Michelin, Apollo, CEAT" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productSize">📐 Size *</label>
+                                <input type="text" id="productSize" placeholder="e.g. 185/65R15" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productType">⚙️ Type</label>
+                                <select id="productType">
+                                    <option value="">-- Select Type --</option>
+                                    <option value="Radial">Radial</option>
+                                    <option value="Bias">Bias</option>
+                                    <option value="Tubeless">Tubeless</option>
+                                    <option value="Tube Type">Tube Type</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productPattern">🔘 Pattern / Model</label>
+                                <input type="text" id="productPattern" placeholder="e.g. Energy Saver, Stormrider">
+                            </div>
+                            <div class="form-group">
+                                <label for="productCostPrice">🏷️ Cost Price (LKR) *</label>
+                                <input type="number" id="productCostPrice" placeholder="0.00" min="0" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productSellingPrice">💰 Selling Price (LKR) *</label>
+                                <input type="number" id="productSellingPrice" placeholder="0.00" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="cancelProductBtn">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="saveProductBtn">💾 Save Product</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Search & Filter + View Toggle -->
+                <div class="filter-bar">
+                    <div class="search-input">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="productSearch" placeholder="Search by brand, size, pattern...">
+                    </div>
+                    <select id="productTypeFilter" style="padding:9px 14px; border-radius:var(--radius-pill); border:1.5px solid var(--surface-border); background:var(--surface-card); color:var(--text-primary); font-family:'DM Sans',sans-serif; cursor:pointer; font-size:13px;">
+                        <option value="">All Types</option>
+                        <option value="Radial">Radial</option>
+                        <option value="Bias">Bias</option>
+                        <option value="Tubeless">Tubeless</option>
+                        <option value="Tube Type">Tube Type</option>
+                    </select>
+                    <div class="view-toggle" id="productViewToggle">
+                        <button class="view-toggle-btn active" data-view="grid" title="Card View">⊞ Cards</button>
+                        <button class="view-toggle-btn" data-view="list" title="List View">☰ List</button>
+                    </div>
+                </div>
+
+                <!-- Product Display Area -->
+                <div id="productDisplayArea">
+                    <div class="product-grid" id="productGrid">
+                        <div class="tyre-spinner"><span class="tyre-spinner-icon">🛞</span>Loading products...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 BILLS PAGE
+            ══════════════════════════════════════════════ -->
+            <div id="bills" class="page">
+                <div class="page-header">
+                    <h2>🧾 Bills</h2>
+                    <button class="btn btn-primary" id="createBillBtn">+ Create Bill</button>
+                </div>
+
+                <!-- Bill Builder -->
+                <div class="bill-builder" id="billBuilderContainer" style="display:none;">
+                    <div class="bill-builder-header">
+                        <h3>🛞 Create New Bill</h3>
+                        <button class="btn btn-secondary btn-sm" id="cancelBillBtn" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.3);color:#fff;">✕ Cancel</button>
+                    </div>
+                    <div class="bill-builder-body">
+                        <input type="hidden" id="billEditId">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="billOutlet">🏪 Select Outlet *</label>
+                                <select id="billOutlet" required>
+                                    <option value="">-- Select Outlet --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="billNumber">📄 Bill Number</label>
+                                <input type="text" id="billNumber" placeholder="Auto-generated if empty">
+                            </div>
+                            <div class="form-group">
+                                <label for="billDate">📅 Bill Date *</label>
+                                <input type="date" id="billDate" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="billPaymentType">💳 Payment Type *</label>
+                                <select id="billPaymentType" required>
+                                    <option value="cash">💵 Cash</option>
+                                    <option value="cheque">💳 Cheque</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="billDiscount">🏷️ Discount (%)</label>
+                                <input type="number" id="billDiscount" placeholder="0" min="0" max="100" step="0.01" value="0">
+                            </div>
+                            <div class="form-group" style="flex: 2;">
+                                <label for="billNotes">📝 Notes (Optional)</label>
+                                <input type="text" id="billNotes" placeholder="Any special notes...">
+                            </div>
+                        </div>
+
+                        <!-- Line Items -->
+                        <div class="bill-line-items">
+                            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+                                <strong style="font-size:14px; color:var(--text-primary);">🛞 Tyre Line Items</strong>
+                                <button class="btn btn-success btn-sm" id="addLineItemBtn">+ Add Item</button>
+                            </div>
+                            <div id="lineItemsContainer">
+                                <!-- Line items injected here -->
+                            </div>
+                        </div>
+
+                        <!-- Totals -->
+                        <div class="bill-totals" id="billTotals">
+                            <div class="bill-total-row">
+                                <span>Subtotal</span>
+                                <span id="billSubtotal">LKR 0.00</span>
+                            </div>
+                            <div class="bill-total-row">
+                                <span>Discount</span>
+                                <span id="billDiscountAmount">LKR 0.00</span>
+                            </div>
+                            <div class="bill-total-row grand-total">
+                                <span>TOTAL</span>
+                                <span id="billGrandTotal">LKR 0.00</span>
+                            </div>
+                        </div>
+
+                        <div class="form-actions" style="margin-top:20px;">
+                            <button type="button" class="btn btn-primary" id="saveBillBtn">💾 Save Bill</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bills Summary -->
+                <div class="bill-summary-strip" id="billsSummary">
+                    <div class="bill-strip-card">
+                        <span class="bill-strip-icon">🧾</span>
+                        <div>
+                            <div class="bill-strip-label">Total Bills</div>
+                            <div class="bill-strip-value" id="billsCount">—</div>
+                        </div>
+                    </div>
+                    <div class="bill-strip-card">
+                        <span class="bill-strip-icon">💰</span>
+                        <div>
+                            <div class="bill-strip-label">Total Value</div>
+                            <div class="bill-strip-value" id="billsTotalValue">—</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Bar -->
+                <div class="filter-bar">
+                    <div class="search-input">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="billSearch" placeholder="Search by bill number or outlet...">
+                    </div>
+                    <select id="billOutletFilter" style="padding:9px 14px; border-radius:var(--radius-pill); border:1.5px solid var(--surface-border); background:var(--surface-card); color:var(--text-primary); font-family:'DM Sans',sans-serif; cursor:pointer; font-size:13px;">
+                        <option value="">All Outlets</option>
+                    </select>
+                    <select id="billStatusFilter" style="padding:9px 14px; border-radius:var(--radius-pill); border:1.5px solid var(--surface-border); background:var(--surface-card); color:var(--text-primary); font-family:'DM Sans',sans-serif; cursor:pointer; font-size:13px;">
+                        <option value="">All Statuses</option>
+                        <option value="unpaid">🔴 Unpaid</option>
+                        <option value="paid">🟢 Paid</option>
+                    </select>
+                    <input type="month" id="billMonthFilter" style="padding:9px 14px; border-radius:var(--radius-pill); border:1.5px solid var(--surface-border); background:var(--surface-card); color:var(--text-primary); font-family:'DM Sans',sans-serif; cursor:pointer; font-size:13px;">
+                </div>
+
+                <!-- Bills Table -->
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Bill No.</th>
+                                <th>Outlet</th>
+                                <th>Date</th>
+                                <th>Pay Type</th>
+                                <th>Items</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="billsTableBody">
+                            <tr class="no-data-row"><td colspan="8">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="billsPagination"></div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 GIVEN CHEQUES PAGE
+            ══════════════════════════════════════════════ -->
+            <div id="given-cheques" class="page">
+                <div class="page-header">
+                    <h2>💳 Given Cheques</h2>
+                    <button class="btn btn-primary" id="addGivenChequeBtn">+ Add Cheque</button>
+                </div>
+
+                <!-- Add Given Cheque Form -->
+                <div class="form-container" id="givenChequeFormContainer" style="display:none;">
+                    <form id="givenChequeForm">
+                        <input type="hidden" id="givenChequeEditId">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="gcBankName">🏦 Bank Name *</label>
+                                <input type="text" id="gcBankName" placeholder="e.g. Bank of Ceylon" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gcChequeNumber">🔢 Cheque Number *</label>
+                                <input type="text" id="gcChequeNumber" placeholder="e.g. 000123456" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gcAmount">💰 Amount (LKR) *</label>
+                                <input type="number" id="gcAmount" placeholder="0.00" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="gcDate">📅 Cheque Date *</label>
+                                <input type="date" id="gcDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gcPayee">👤 Payee (To Whom)</label>
+                                <input type="text" id="gcPayee" placeholder="e.g. ABC Suppliers">
+                            </div>
+                            <div class="form-group">
+                                <label for="gcStatus">📌 Status</label>
+                                <select id="gcStatus">
+                                    <option value="pending">Pending</option>
+                                    <option value="cleared">Cleared</option>
+                                    <option value="bounced">Bounced</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="gcNotes">📝 Notes</label>
+                                <input type="text" id="gcNotes" placeholder="Optional notes...">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="cancelGivenChequeBtn">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="saveGivenChequeBtn">💾 Save Cheque</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Summary Cards -->
+                <div class="cheque-summary">
+                    <div class="cheque-stat-card">
+                        <div class="cheque-stat-label">Total Given</div>
+                        <div class="cheque-stat-value" id="gcTotalCount">—</div>
+                    </div>
+                    <div class="cheque-stat-card">
+                        <div class="cheque-stat-label">Pending</div>
+                        <div class="cheque-stat-value amber" id="gcPendingCount">—</div>
+                    </div>
+                    <div class="cheque-stat-card">
+                        <div class="cheque-stat-label">Cleared</div>
+                        <div class="cheque-stat-value green" id="gcClearedCount">—</div>
+                    </div>
+                    <div class="cheque-stat-card">
+                        <div class="cheque-stat-label">Bounced</div>
+                        <div class="cheque-stat-value red" id="gcBouncedCount">—</div>
+                    </div>
+                    <div class="cheque-stat-card">
+                        <div class="cheque-stat-label">Total Pending Value</div>
+                        <div class="cheque-stat-value amber" id="gcPendingValue">—</div>
+                    </div>
+                </div>
+
+                <!-- Filter Bar -->
+                <div class="filter-bar">
+                    <div class="search-input">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="gcSearch" placeholder="Search cheque number, bank, payee...">
+                    </div>
+                    <select id="gcStatusFilter" style="padding:9px 14px; border-radius:var(--radius-pill); border:1.5px solid var(--surface-border); background:var(--surface-card); color:var(--text-primary); font-family:'DM Sans',sans-serif; cursor:pointer; font-size:13px;">
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="cleared">Cleared</option>
+                        <option value="bounced">Bounced</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+
+                <!-- Given Cheques Table -->
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cheque No.</th>
+                                <th>Bank</th>
+                                <th>Payee</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="givenChequesTableBody">
+                            <tr class="no-data-row"><td colspan="7">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="gcPagination"></div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════
+                 RECEIVED CHEQUES PAGE
+            ══════════════════════════════════════════════ -->
+            <div id="received-cheques" class="page">
+                <div class="page-header">
+                    <h2>📨 Received Cheques</h2>
+                    <button class="btn btn-primary" id="addReceivedChequeBtn">+ Add Cheque</button>
+                </div>
+
+                <!-- Add Received Cheque Form -->
+                <div class="form-container" id="receivedChequeFormContainer" style="display:none;">
+                    <form id="receivedChequeForm">
+                        <input type="hidden" id="receivedChequeEditId">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="rcBankName">🏦 Bank Name *</label>
+                                <input type="text" id="rcBankName" placeholder="e.g. Commercial Bank" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="rcChequeNumber">🔢 Cheque Number *</label>
+                                <input type="text" id="rcChequeNumber" placeholder="e.g. 000456789" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="rcAmount">💰 Amount (LKR) *</label>
+                                <input type="number" id="rcAmount" placeholder="0.00" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="rcDrawer">👤 Drawer (From Whom) *</label>
+                                <input type="text" id="rcDrawer" placeholder="e.g. Kamal Perera" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="rcOutlet">🏪 Related Outlet</label>
+                                <select id="rcOutlet">
+                                    <option value="">-- None / Not linked --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="rcReceivedDate">📅 Received Date *</label>
+                                <input type="date" id="rcReceivedDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="rcRealizingDate">🏦 Realizing Date *</label>
+                                <input type="date" id="rcRealizingDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="rcStatus">📌 Status</label>
+                                <select id="rcStatus">
+                                    <option value="pending">Pending</option>
+                                    <option value="cleared">Cleared</option>
+                                    <option value="bounced">Bounced</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="rcNotes">📝 Notes</label>
+                                <input type="text" id="rcNotes" placeholder="Optional notes...">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="cancelReceivedChequeBtn">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="saveReceivedChequeBtn">💾 Save Cheque</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Summary Cards -->
+                <div class="cheque-summary">
+                    <div class="cheque-stat-card">
+                        <div class="cheque-stat-label">Total Received</div>
+                        <div class="cheque-stat-value" id="rcTotalCount">—</div>
+                    </div>
+                    <div class="cheque-stat-card">
+                        <div class="cheque-stat-label">Pending</div>
+                        <div class="cheque-stat-value amber" id="rcPendingCount">—</div>
+                    </div>
+                    <div class="cheque-stat-card">
+                        <div class="cheque-stat-label">Cleared</div>
+                        <div class="cheque-stat-value green" id="rcClearedCount">—</div>
+                    </div>
+                    <div class="cheque-stat-card">
+                        <div class="cheque-stat-label">Bounced</div>
+                        <div class="cheque-stat-value red" id="rcBouncedCount">—</div>
+                    </div>
+                    <div class="cheque-stat-card">
+                        <div class="cheque-stat-label">Total Pending Value</div>
+                        <div class="cheque-stat-value amber" id="rcPendingValue">—</div>
+                    </div>
+                </div>
+
+                <!-- Filter Bar -->
+                <div class="filter-bar">
+                    <div class="search-input">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="rcSearch" placeholder="Search cheque number, bank, drawer...">
+                    </div>
+                    <select id="rcStatusFilter" style="padding:9px 14px; border-radius:var(--radius-pill); border:1.5px solid var(--surface-border); background:var(--surface-card); color:var(--text-primary); font-family:'DM Sans',sans-serif; cursor:pointer; font-size:13px;">
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="cleared">Cleared</option>
+                        <option value="bounced">Bounced</option>
+                    </select>
+                </div>
+
+                <!-- Received Cheques Table -->
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cheque No.</th>
+                                <th>Bank</th>
+                                <th>Drawer</th>
+                                <th>Amount</th>
+                                <th>Realizing Date</th>
+                                <th>Countdown</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="receivedChequesTableBody">
+                            <tr class="no-data-row"><td colspan="8">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="rcPagination"></div>
+            </div>
+
+        </div><!-- /pages-container -->
+    </main>
+</div><!-- /container -->
+
+<!-- ═══════════════════════════════════════════
+     BILL VIEW MODAL
+════════════════════════════════════════════ -->
+<div class="modal-overlay" id="billViewModal">
+    <div class="modal-content" style="max-width:700px;">
+        <div class="modal-header">
+            <div class="modal-title" id="billViewTitle">Bill Details</div>
+            <button class="modal-close" id="billViewClose">✕</button>
+        </div>
+        <div id="billViewBody"></div>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Supabase CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+</body>
+</html>
