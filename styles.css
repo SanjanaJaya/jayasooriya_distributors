@@ -173,7 +173,10 @@ img {
    ===================================================== */
 .sidebar {
     width: var(--sidebar-w);
-    background: linear-gradient(175deg, var(--brand-red) 0%, var(--brand-red-dark) 55%, #6B0010 100%);
+    background: 
+        radial-gradient(circle at 100% 0%, rgba(209, 0, 31, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 0% 100%, rgba(209, 0, 31, 0.12) 0%, transparent 60%),
+        linear-gradient(175deg, #131418 0%, #1e2026 50%, #0d0e11 100%);
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -186,35 +189,23 @@ img {
     position: relative;
 }
 
-/* Tyre tread pattern overlay */
+/* Premium Tyre tread pattern overlay */
 .sidebar::before {
     content: '';
     position: absolute;
     inset: 0;
-    background:
-        radial-gradient(ellipse at top right, rgba(255,255,255,0.06) 0%, transparent 60%),
-        radial-gradient(ellipse at bottom left, rgba(0,0,0,0.15) 0%, transparent 60%);
+    background-image: 
+        radial-gradient(ellipse at top right, rgba(255,255,255,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse at bottom left, rgba(0,0,0,0.2) 0%, transparent 60%),
+        url("data:image/svg+xml,%3Csvg%20width=%2760%27%20height=%2760%27%20viewBox=%270%200%2060%2060%27%20xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cg%20fill=%27none%27%20stroke=%27rgba%28255,%20255,%20255,%200.022%29%27%20stroke-width=%272.5%27%20stroke-linecap=%27round%27%3E%3Cpath%20d=%27M5%205%20L25%2020%20L5%2035%20M55%205%20L35%2020%20L55%2035%27%20/%3E%3Cpath%20d=%27M5%2035%20L25%2050%20L5%2065%20M55%2035%20L35%2050%20L55%2065%27%20/%3E%3C/g%3E%3Cline%20x1=%2730%27%20y1=%270%27%20x2=%2730%27%20y2=%2760%27%20stroke=%27rgba%28255,%20255,%20255,%200.012%29%27%20stroke-width=%272%27%20stroke-dasharray=%275,5%27%20/%3E%3C/svg%3E");
+    background-repeat: repeat;
     pointer-events: none;
     z-index: 0;
 }
 
-/* Tyre tread SVG pattern at bottom */
+/* Clear legacy overlay to avoid overlapping */
 .sidebar::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 120px;
-    background-image: repeating-linear-gradient(
-        90deg,
-        transparent,
-        transparent 8px,
-        rgba(255,255,255,0.04) 8px,
-        rgba(255,255,255,0.04) 10px
-    );
-    pointer-events: none;
-    z-index: 0;
+    content: none;
 }
 
 .sidebar > * { position: relative; z-index: 1; }
@@ -267,14 +258,15 @@ img {
     text-transform: uppercase;
     letter-spacing: 2px;
     text-align: center;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(209, 0, 31, 0.4), 0 1px 3px rgba(0,0,0,0.6);
 }
 
 .brand-subtitle {
     font-size: 10px;
     font-weight: 500;
     letter-spacing: 1.5px;
-    color: rgba(255,255,255,0.60);
+    color: rgba(255,255,255,0.65);
     text-transform: uppercase;
     text-align: center;
     margin-top: -8px;
@@ -297,7 +289,7 @@ img {
     padding: 13px 16px;
     background: transparent;
     border: none;
-    color: rgba(255,255,255,0.80);
+    color: rgba(255,255,255,0.88);
     cursor: pointer;
     font-family: 'DM Sans', sans-serif;
     font-size: 14px;
@@ -1739,6 +1731,41 @@ tbody td {
     font-size: 40px;
     animation: spinSlow 1.5s linear infinite;
     display: block;
+}
+
+/* =====================================================
+   MODERN TYRE SVG ICON
+   ===================================================== */
+.icon-tyre {
+    width: 1em;
+    height: 1em;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.nav-icon .icon-tyre {
+    width: 20px;
+    height: 20px;
+}
+
+.metric-icon .icon-tyre {
+    width: 32px;
+    height: 32px;
+}
+
+.tyre-spinner-icon .icon-tyre {
+    width: 40px;
+    height: 40px;
+}
+
+.product-card-tyre-icon .icon-tyre {
+    width: 64px;
+    height: 64px;
 }
 
 /* =====================================================

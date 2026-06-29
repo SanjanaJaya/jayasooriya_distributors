@@ -553,7 +553,7 @@ async function loadDashboard() {
 async function loadOutlets() {
     if (!supabaseClient || !currentUser) return;
     const area = document.getElementById('outletDisplayArea');
-    if (area) area.innerHTML = '<div class="tyre-spinner"><span class="tyre-spinner-icon">🛞</span>Loading...</div>';
+    if (area) area.innerHTML = '<div class="tyre-spinner"><span class="tyre-spinner-icon"><svg class="icon-tyre" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.64 5.64l1.42 1.42M16.94 16.94l1.42 1.42M5.64 18.36l1.42-1.42M16.94 7.06l1.42-1.42"/></svg></span>Loading...</div>';
 
     try {
         const { data, error } = await supabaseClient.from('outlets').select('*').order('name');
@@ -728,7 +728,7 @@ window.deleteOutlet = function(id, name) {
 async function loadProducts() {
     if (!supabaseClient || !currentUser) return;
     const area = document.getElementById('productDisplayArea');
-    if (area) area.innerHTML = '<div class="tyre-spinner"><span class="tyre-spinner-icon">🛞</span>Loading...</div>';
+    if (area) area.innerHTML = '<div class="tyre-spinner"><span class="tyre-spinner-icon"><svg class="icon-tyre" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.64 5.64l1.42 1.42M16.94 16.94l1.42 1.42M5.64 18.36l1.42-1.42M16.94 7.06l1.42-1.42"/></svg></span>Loading...</div>';
 
     try {
         const { data, error } = await supabaseClient.from('products').select('*').order('brand').order('size');
@@ -757,7 +757,7 @@ function renderProductGrid(data) {
     }
     area.innerHTML = `<div class="product-grid">${data.map(p => `
         <div class="product-card">
-            <div class="product-card-tyre-icon">🛞</div>
+            <div class="product-card-tyre-icon"><svg class="icon-tyre" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.64 5.64l1.42 1.42M16.94 16.94l1.42 1.42M5.64 18.36l1.42-1.42M16.94 7.06l1.42-1.42"/></svg></div>
             <div class="product-brand">${p.brand}</div>
             <div class="product-size">${p.size}</div>
             <div class="product-meta">
@@ -1071,7 +1071,7 @@ function renderLineItems() {
     container.innerHTML = billLineItems.map((item, idx) => `
         <div class="bill-line-item" id="lineItem_${idx}">
             <div class="form-group">
-                <label>🛞 Product</label>
+                <label><svg class="icon-tyre" style="width: 14px; height: 14px; margin-right: 4px; vertical-align: -2px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.64 5.64l1.42 1.42M16.94 16.94l1.42 1.42M5.64 18.36l1.42-1.42M16.94 7.06l1.42-1.42"/></svg>Product</label>
                 <select onchange="onLineItemProductChange(${idx}, this.value)">
                     <option value="">-- Select Tyre --</option>
                     ${productsCache.map(p => `<option value="${p.id}" ${p.id === item.product_id ? 'selected' : ''}>${p.brand} ${p.size}${p.type ? ' — ' + p.type : ''} (${fmtLKR(p.selling_price)})</option>`).join('')}
